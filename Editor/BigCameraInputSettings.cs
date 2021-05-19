@@ -18,6 +18,14 @@ namespace UnityEditor.BigImageRecorder
 
         [SerializeField] string cameraTag = "MainCamera";
 
+        public int HorizontalTileCount
+        {
+            get => horizontalTileCount;
+            set => horizontalTileCount = value;
+        }
+
+        [SerializeField] int horizontalTileCount = 2;
+
         public override int OutputHeight
         {
             get => outputHeight;
@@ -34,9 +42,35 @@ namespace UnityEditor.BigImageRecorder
 
         [SerializeField] int outputWidth = 8096;
 
+        public int VerticalTileCount
+        {
+            get => verticalTileCount;
+            set => verticalTileCount = value;
+        }
+
+        [SerializeField] int verticalTileCount= 2;
+
         protected override bool ValidityCheck(List<string> errors)
         {
             var ok = true;
+
+            if (HorizontalTileCount < 1 || VerticalTileCount < 1)
+            {
+                errors.Add($"Need a minimum of 1 horizontal and vertical tile.");
+                ok = false;
+            }
+
+            if (OutputWidth % HorizontalTileCount != 0)
+            {
+                errors.Add($"Output width must be a multiple of the horizontal tile count.");
+                ok = false;
+            }
+
+            if (OutputHeight % VerticalTileCount != 0)
+            {
+                errors.Add($"Output height must be a multiple of the vertical tile count.");
+                ok = false;
+            }
 
             if (OutputWidth <= 0 || OutputHeight <= 0)
             {
