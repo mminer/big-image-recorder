@@ -77,6 +77,14 @@ namespace UnityEditor.BigImageRecorder
             var projectionMatrices = new Matrix4x4[inputSettings.ColumnCount, inputSettings.RowCount];
             var camera = GetTargetCamera(inputSettings.CameraTag);
 
+            // Values to create the original projection matrix.
+            // We multiply these by a modifier from -1 to 1 to get a partial projection matrix.
+            //
+            // Say we want to split the projection matrix into vertical thirds. To get the three projection matrices:
+            // [ | | ]
+            // Left:    left * 1;       right * -1/3
+            // Center:  left * 1/3;     right * 1/3
+            // Right:   left * -1/3;    right * 1
             var top = camera.nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
             var bottom = -top;
             var left = bottom * camera.aspect;
