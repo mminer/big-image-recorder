@@ -42,6 +42,9 @@ namespace UnityEditor.BigImageRecorder
         [Tooltip("Number of vertical tiles.")]
         [SerializeField] int rowCount = 2;
 
+        public int TileWidth => OutputWidth / ColumnCount;
+        public int TileHeight => OutputWidth / ColumnCount;
+
         protected override bool ValidityCheck(List<string> errors)
         {
             var ok = true;
@@ -67,6 +70,12 @@ namespace UnityEditor.BigImageRecorder
             if (OutputWidth <= 0 || OutputHeight <= 0)
             {
                 errors.Add($"Invalid output resolution: {OutputWidth}x{OutputHeight}");
+                ok = false;
+            }
+
+            if (TileWidth > SystemInfo.maxTextureSize || TileHeight > SystemInfo.maxTextureSize)
+            {
+                errors.Add($"Tile size exceeds the maximum texture size ({SystemInfo.maxTextureSize}).");
                 ok = false;
             }
 

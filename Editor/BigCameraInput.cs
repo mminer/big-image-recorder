@@ -56,14 +56,18 @@ namespace UnityEditor.BigImageRecorder
         static RenderTexture[,] CreateOutputRenderTextures(BigCameraInputSettings inputSettings)
         {
             var outputRenderTextures = new RenderTexture[inputSettings.ColumnCount, inputSettings.RowCount];
-            var width = inputSettings.OutputWidth / inputSettings.ColumnCount;
-            var height = inputSettings.OutputHeight / inputSettings.RowCount;
 
             for (var row = 0; row < inputSettings.RowCount; row++)
             {
                 for (var column = 0; column < inputSettings.ColumnCount; column++)
                 {
-                    var renderTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
+                    var renderTexture = new RenderTexture(
+                        inputSettings.TileWidth,
+                        inputSettings.TileHeight,
+                        0,
+                        RenderTextureFormat.ARGB32,
+                        RenderTextureReadWrite.Default);
+
                     renderTexture.Create();
                     outputRenderTextures[row, column] = renderTexture;
                 }
