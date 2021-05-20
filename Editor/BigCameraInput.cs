@@ -39,12 +39,12 @@ namespace UnityEditor.BigImageRecorder
             var camera = GetTargetCamera(InputSettings.CameraTag);
             var originalTargetTexture = camera.targetTexture;
 
-            for (var i = 0; i < InputSettings.HorizontalTileCount; i++)
+            for (var row = 0; row < InputSettings.RowCount; row++)
             {
-                for (var j = 0; j < InputSettings.VerticalTileCount; j++)
+                for (var column = 0; column < InputSettings.ColumnCount; column++)
                 {
-                    camera.projectionMatrix = projectionMatrices[i, j];
-                    camera.targetTexture = OutputRenderTextures[i, j];
+                    camera.projectionMatrix = projectionMatrices[row, column];
+                    camera.targetTexture = OutputRenderTextures[row, column];
                     camera.Render();
                 }
             }
@@ -55,17 +55,17 @@ namespace UnityEditor.BigImageRecorder
 
         static RenderTexture[,] CreateOutputRenderTextures(BigCameraInputSettings inputSettings)
         {
-            var outputRenderTextures = new RenderTexture[inputSettings.HorizontalTileCount, inputSettings.VerticalTileCount];
-            var width = inputSettings.OutputWidth / inputSettings.HorizontalTileCount;
-            var height = inputSettings.OutputHeight / inputSettings.VerticalTileCount;
+            var outputRenderTextures = new RenderTexture[inputSettings.ColumnCount, inputSettings.RowCount];
+            var width = inputSettings.OutputWidth / inputSettings.ColumnCount;
+            var height = inputSettings.OutputHeight / inputSettings.RowCount;
 
-            for (var i = 0; i < inputSettings.HorizontalTileCount; i++)
+            for (var row = 0; row < inputSettings.RowCount; row++)
             {
-                for (var j = 0; j < inputSettings.VerticalTileCount; j++)
+                for (var column = 0; column < inputSettings.ColumnCount; column++)
                 {
                     var renderTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
                     renderTexture.Create();
-                    outputRenderTextures[i, j] = renderTexture;
+                    outputRenderTextures[row, column] = renderTexture;
                 }
             }
 
@@ -74,7 +74,7 @@ namespace UnityEditor.BigImageRecorder
 
         static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings)
         {
-            var projectionMatrices = new Matrix4x4[inputSettings.HorizontalTileCount, inputSettings.VerticalTileCount];
+            var projectionMatrices = new Matrix4x4[inputSettings.ColumnCount, inputSettings.RowCount];
             var camera = GetTargetCamera(inputSettings.CameraTag);
 
             var top = camera.nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
@@ -83,25 +83,25 @@ namespace UnityEditor.BigImageRecorder
             var right = top * camera.aspect;
 
             // How much of the final image each tile accounts for.
-            var horizontalTilePercent = 1f / inputSettings.HorizontalTileCount;
-            var verticalTilePercent = 1f / inputSettings.VerticalTileCount;
+            var horizontalTilePercent = 1f / inputSettings.ColumnCount;
+            var verticalTilePercent = 1f / inputSettings.RowCount;
 
-            for (var i = 0; i < inputSettings.HorizontalTileCount; i++)
+            for (var row = 0; row < inputSettings.RowCount; row++)
             {
-                var tileLeft = left * (1 - 2 * horizontalTilePercent * i);
-                var tileRight = right * (-1 + 2 * horizontalTilePercent * (i + 1));
+                var tileTop = top * (1 - 2 * verticalTilePercent * row);
+                var tileBottom = bottom * (-1 + 2 * verticalTilePercent * (row + 1));
 
-                for (var j = 0; j < inputSettings.VerticalTileCount; j++)
+                for (var column = 0; column < inputSettings.ColumnCount; column++)
                 {
-                    var tileTop = top * (1 - 2 * verticalTilePercent * j);
-                    var tileBottom = bottom * (-1 + 2 * verticalTilePercent * (j + 1));
+                    var tileLeft = left * (1 - 2 * horizontalTilePercent * column);
+                    var tileRight = right * (-1 + 2 * horizontalTilePercent * (column + 1));
 
                     var projectionMatrix = camera.projectionMatrix;
                     projectionMatrix.m00 = 2 * camera.nearClipPlane / (tileRight - tileLeft);
                     projectionMatrix.m02 = (tileRight + tileLeft) / (tileRight - tileLeft);
                     projectionMatrix.m11 = 2 * camera.nearClipPlane / (tileTop - tileBottom);
                     projectionMatrix.m12 = (tileTop + tileBottom) / (tileTop - tileBottom);
-                    projectionMatrices[i, j] = projectionMatrix;
+                    projectionMatrices[row, column] = projectionMatrix;
                 }
             }
 

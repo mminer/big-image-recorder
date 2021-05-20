@@ -18,13 +18,13 @@ namespace UnityEditor.BigImageRecorder
 
         [SerializeField] string cameraTag = "MainCamera";
 
-        public int HorizontalTileCount
+        public int ColumnCount
         {
-            get => horizontalTileCount;
-            set => horizontalTileCount = value;
+            get => columnCount;
+            set => columnCount = value;
         }
 
-        [SerializeField] int horizontalTileCount = 2;
+        [SerializeField] int columnCount = 2;
 
         public override int OutputHeight
         {
@@ -42,33 +42,33 @@ namespace UnityEditor.BigImageRecorder
 
         [SerializeField] int outputWidth = 8096;
 
-        public int VerticalTileCount
+        public int RowCount
         {
-            get => verticalTileCount;
-            set => verticalTileCount = value;
+            get => rowCount;
+            set => rowCount = value;
         }
 
-        [SerializeField] int verticalTileCount= 2;
+        [SerializeField] int rowCount = 2;
 
         protected override bool ValidityCheck(List<string> errors)
         {
             var ok = true;
 
-            if (HorizontalTileCount < 1 || VerticalTileCount < 1)
+            if (ColumnCount < 1 || RowCount < 1)
             {
                 errors.Add($"Need a minimum of 1 horizontal and vertical tile.");
                 ok = false;
             }
 
-            if (OutputWidth % HorizontalTileCount != 0)
+            if (OutputWidth % ColumnCount != 0)
             {
-                errors.Add($"Output width must be a multiple of the horizontal tile count.");
+                errors.Add($"Output width must be a multiple of the column count.");
                 ok = false;
             }
 
-            if (OutputHeight % VerticalTileCount != 0)
+            if (OutputHeight % RowCount != 0)
             {
-                errors.Add($"Output height must be a multiple of the vertical tile count.");
+                errors.Add($"Output height must be a multiple of the row count.");
                 ok = false;
             }
 

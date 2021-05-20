@@ -14,12 +14,13 @@ namespace UnityEditor.BigImageRecorder
             var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
             var input = m_Inputs[0] as BigCameraInput;
 
-            for (var i = 0; i < input.InputSettings.HorizontalTileCount; i++)
+            for (var row = 0; row < input.InputSettings.RowCount; row++)
             {
-                for (var j = 0; j < input.InputSettings.VerticalTileCount; j++)
+                for (var column = 0; column < input.InputSettings.ColumnCount; column++)
                 {
-                    var sectionPath = AddPathSuffix(path, $"_{i}-{j}");
-                    var texture = RenderTextureToTexture2D(input.OutputRenderTextures[i, j]);
+                    var sectionPath = AddPathSuffix(path, $"_{row}-{column}");
+                    var renderTexture = input.OutputRenderTextures[row, column];
+                    var texture = RenderTextureToTexture2D(renderTexture);
                     var bytes = texture.EncodeToPNG();
                     File.WriteAllBytes(sectionPath, bytes);
                 }
