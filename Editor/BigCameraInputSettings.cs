@@ -10,20 +10,13 @@ namespace UnityEditor.BigImageRecorder
     {
         protected override Type InputType => typeof(BigCameraInput);
 
-        public string CameraTag
-        {
-            get => cameraTag;
-            set => cameraTag = value;
-        }
+        public string CameraTag => cameraTag;
 
         [SerializeField] string cameraTag = "MainCamera";
 
-        public int ColumnCount
-        {
-            get => columnCount;
-            set => columnCount = value;
-        }
+        public int ColumnCount => columnCount;
 
+        [Tooltip("Number of horizontal tiles.")]
         [SerializeField] int columnCount = 2;
 
         public override int OutputHeight
@@ -32,6 +25,7 @@ namespace UnityEditor.BigImageRecorder
             set => outputHeight = value;
         }
 
+        [Tooltip("Vertical resolution of final image once stitched together.")]
         [SerializeField] int outputHeight = 8096;
 
         public override int OutputWidth
@@ -40,14 +34,12 @@ namespace UnityEditor.BigImageRecorder
             set => outputWidth = value;
         }
 
+        [Tooltip("Horizontal resolution of final image once stitched together.")]
         [SerializeField] int outputWidth = 8096;
 
-        public int RowCount
-        {
-            get => rowCount;
-            set => rowCount = value;
-        }
+        public int RowCount => rowCount;
 
+        [Tooltip("Number of vertical tiles.")]
         [SerializeField] int rowCount = 2;
 
         protected override bool ValidityCheck(List<string> errors)
