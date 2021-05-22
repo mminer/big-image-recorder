@@ -55,7 +55,7 @@ namespace UnityEditor.BigImageRecorder
 
         static RenderTexture[,] CreateOutputRenderTextures(BigCameraInputSettings inputSettings)
         {
-            var outputRenderTextures = new RenderTexture[inputSettings.Columns, inputSettings.Rows];
+            var outputRenderTextures = new RenderTexture[inputSettings.Rows, inputSettings.Columns];
 
             for (var row = 0; row < inputSettings.Rows; row++)
             {
@@ -78,7 +78,7 @@ namespace UnityEditor.BigImageRecorder
 
         static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings)
         {
-            var projectionMatrices = new Matrix4x4[inputSettings.Columns, inputSettings.Rows];
+            var projectionMatrices = new Matrix4x4[inputSettings.Rows, inputSettings.Columns];
             var camera = GetTargetCamera(inputSettings.CameraTag);
 
             // Values to create the original projection matrix.
