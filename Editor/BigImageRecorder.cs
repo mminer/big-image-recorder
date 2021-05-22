@@ -67,9 +67,9 @@ namespace UnityEditor.BigImageRecorder
         {
             var paths = new List<string>();
 
-            for (RowBeingWritten = 0; RowBeingWritten < Input.InputSettings.RowCount; RowBeingWritten++)
+            for (RowBeingWritten = 0; RowBeingWritten < Input.InputSettings.Rows; RowBeingWritten++)
             {
-                for (ColumnBeingWritten = 0; ColumnBeingWritten < Input.InputSettings.ColumnCount; ColumnBeingWritten++)
+                for (ColumnBeingWritten = 0; ColumnBeingWritten < Input.InputSettings.Columns; ColumnBeingWritten++)
                 {
                     var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
                     paths.Add(path);

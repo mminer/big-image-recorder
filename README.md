@@ -32,7 +32,8 @@ go this route if you want to modify the source code.
 4. Enter your desired output size, number of rows and columns, and start recording
 
 Recorder spits out multiple images per frame, one for each "tile". By default
-these are named *image_FRAME_ROW-COLUMN.png*, e.g. *image_0003_1-1.png*.
+these are named *image_<Frame>_<Tile Row>-<Tile Column>.png*, e.g.
+*image_0003_1-1.png*.
 
 ### Image Stitching
 
@@ -48,5 +49,5 @@ example, if you install ImageMagick on macOS using Homebrew, enter
 `/usr/local/bin/montage` as the command.
 
 The arguments can contain the same wildcards as the file name. Use these to
-specify the frame, row count, and column count, e.g. `-mode concatenate -tile
-<Row Count>x<Column Count> image_<Frame>*.png out_<Frame>.png`.
+specify the frame, rows, and columns, e.g. `-mode concatenate -tile
+<Rows>x<Columns> image_<Frame>*.png out_<Frame>.png`.

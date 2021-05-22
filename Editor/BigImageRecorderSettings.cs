@@ -7,10 +7,10 @@ namespace UnityEditor.BigImageRecorder
     [RecorderSettings(typeof(BigImageRecorder), "Big Image Sequence", "imagesequence_16")]
     class BigImageRecorderSettings : RecorderSettings
     {
-        static readonly string columnCountWildcard = DefaultWildcard.GeneratePattern("Column Count");
-        static readonly string columnWildcard = DefaultWildcard.GeneratePattern("Column");
-        static readonly string rowCountWildcard = DefaultWildcard.GeneratePattern("Row Count");
-        static readonly string rowWildcard = DefaultWildcard.GeneratePattern("Row");
+        static readonly string columnsWildcard = DefaultWildcard.GeneratePattern("Columns");
+        static readonly string rowsWildcard = DefaultWildcard.GeneratePattern("Rows");
+        static readonly string tileColumnWildcard = DefaultWildcard.GeneratePattern("Tile Column");
+        static readonly string tileRowWildcard = DefaultWildcard.GeneratePattern("Tile Row");
 
         public bool DeleteAfterStitching => deleteAfterStitching;
 
@@ -37,19 +37,19 @@ namespace UnityEditor.BigImageRecorder
 
         public BigImageRecorderSettings()
         {
-            FileNameGenerator.AddWildcard(rowCountWildcard, session =>
-                (session?.recorder as BigImageRecorder)?.Input.InputSettings.RowCount.ToString() ?? "0");
+            FileNameGenerator.AddWildcard(rowsWildcard, session =>
+                (session?.recorder as BigImageRecorder)?.Input.InputSettings.Rows.ToString() ?? "0");
 
-            FileNameGenerator.AddWildcard(columnCountWildcard, session =>
-                (session?.recorder as BigImageRecorder)?.Input.InputSettings.ColumnCount.ToString() ?? "0");
+            FileNameGenerator.AddWildcard(columnsWildcard, session =>
+                (session?.recorder as BigImageRecorder)?.Input.InputSettings.Columns.ToString() ?? "0");
 
-            FileNameGenerator.AddWildcard(rowWildcard, session =>
+            FileNameGenerator.AddWildcard(tileRowWildcard, session =>
                 (session?.recorder as BigImageRecorder)?.RowBeingWritten.ToString() ?? "0");
 
-            FileNameGenerator.AddWildcard(columnWildcard, session =>
+            FileNameGenerator.AddWildcard(tileColumnWildcard, session =>
                 (session?.recorder as BigImageRecorder)?.ColumnBeingWritten.ToString() ?? "0");
 
-            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{rowWildcard}-{rowWildcard}";
+            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{tileRowWildcard}-{tileRowWildcard}";
         }
     }
 }

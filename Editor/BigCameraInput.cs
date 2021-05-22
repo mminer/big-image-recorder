@@ -39,9 +39,9 @@ namespace UnityEditor.BigImageRecorder
             var camera = GetTargetCamera(InputSettings.CameraTag);
             var originalTargetTexture = camera.targetTexture;
 
-            for (var row = 0; row < InputSettings.RowCount; row++)
+            for (var row = 0; row < InputSettings.Rows; row++)
             {
-                for (var column = 0; column < InputSettings.ColumnCount; column++)
+                for (var column = 0; column < InputSettings.Columns; column++)
                 {
                     camera.projectionMatrix = projectionMatrices[row, column];
                     camera.targetTexture = OutputRenderTextures[row, column];
@@ -55,11 +55,11 @@ namespace UnityEditor.BigImageRecorder
 
         static RenderTexture[,] CreateOutputRenderTextures(BigCameraInputSettings inputSettings)
         {
-            var outputRenderTextures = new RenderTexture[inputSettings.ColumnCount, inputSettings.RowCount];
+            var outputRenderTextures = new RenderTexture[inputSettings.Columns, inputSettings.Rows];
 
-            for (var row = 0; row < inputSettings.RowCount; row++)
+            for (var row = 0; row < inputSettings.Rows; row++)
             {
-                for (var column = 0; column < inputSettings.ColumnCount; column++)
+                for (var column = 0; column < inputSettings.Columns; column++)
                 {
                     var renderTexture = new RenderTexture(
                         inputSettings.TileWidth,
@@ -78,7 +78,7 @@ namespace UnityEditor.BigImageRecorder
 
         static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings)
         {
-            var projectionMatrices = new Matrix4x4[inputSettings.ColumnCount, inputSettings.RowCount];
+            var projectionMatrices = new Matrix4x4[inputSettings.Columns, inputSettings.Rows];
             var camera = GetTargetCamera(inputSettings.CameraTag);
 
             // Values to create the original projection matrix.
@@ -95,15 +95,15 @@ namespace UnityEditor.BigImageRecorder
             var right = top * camera.aspect;
 
             // How much of the final image each tile accounts for.
-            var horizontalTilePercent = 1f / inputSettings.ColumnCount;
-            var verticalTilePercent = 1f / inputSettings.RowCount;
+            var horizontalTilePercent = 1f / inputSettings.Columns;
+            var verticalTilePercent = 1f / inputSettings.Rows;
 
-            for (var row = 0; row < inputSettings.RowCount; row++)
+            for (var row = 0; row < inputSettings.Rows; row++)
             {
                 var tileTop = top * (1 - 2 * verticalTilePercent * row);
                 var tileBottom = bottom * (-1 + 2 * verticalTilePercent * (row + 1));
 
-                for (var column = 0; column < inputSettings.ColumnCount; column++)
+                for (var column = 0; column < inputSettings.Columns; column++)
                 {
                     var tileLeft = left * (1 - 2 * horizontalTilePercent * column);
                     var tileRight = right * (-1 + 2 * horizontalTilePercent * (column + 1));

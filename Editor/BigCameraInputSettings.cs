@@ -14,10 +14,10 @@ namespace UnityEditor.BigImageRecorder
 
         [SerializeField] string cameraTag = "MainCamera";
 
-        public int ColumnCount => columnCount;
+        public int Columns => columns;
 
         [Tooltip("Number of horizontal tiles.")]
-        [SerializeField] int columnCount = 2;
+        [SerializeField] int columns = 2;
 
         public override int OutputHeight
         {
@@ -37,33 +37,33 @@ namespace UnityEditor.BigImageRecorder
         [Tooltip("Horizontal resolution of final image once stitched together.")]
         [SerializeField] int outputWidth = 8096;
 
-        public int RowCount => rowCount;
+        public int Rows => rows;
 
         [Tooltip("Number of vertical tiles.")]
-        [SerializeField] int rowCount = 2;
+        [SerializeField] int rows = 2;
 
-        public int TileWidth => OutputWidth / ColumnCount;
-        public int TileHeight => OutputWidth / ColumnCount;
+        public int TileWidth => OutputWidth / Columns;
+        public int TileHeight => OutputWidth / Columns;
 
         protected override bool ValidityCheck(List<string> errors)
         {
             var ok = true;
 
-            if (ColumnCount < 1 || RowCount < 1)
+            if (Columns < 1 || Rows < 1)
             {
-                errors.Add($"Need a minimum of 1 horizontal and vertical tile.");
+                errors.Add($"Need at least one row and column.");
                 ok = false;
             }
 
-            if (OutputWidth % ColumnCount != 0)
+            if (OutputWidth % Columns != 0)
             {
-                errors.Add($"Output width must be a multiple of the column count.");
+                errors.Add($"Output width must be a multiple of the columns.");
                 ok = false;
             }
 
-            if (OutputHeight % RowCount != 0)
+            if (OutputHeight % Rows != 0)
             {
-                errors.Add($"Output height must be a multiple of the row count.");
+                errors.Add($"Output height must be a multiple of the rows.");
                 ok = false;
             }
 
