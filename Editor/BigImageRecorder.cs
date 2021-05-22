@@ -9,6 +9,17 @@ namespace UnityEditor.BigImageRecorder
     /// </summary>
     class BigImageRecorder : GenericRecorder<BigImageRecorderSettings>
     {
+        protected override bool BeginRecording(RecordingSession session)
+        {
+            if (!base.BeginRecording(session))
+            {
+                return false;
+            }
+
+            Settings.FileNameGenerator.CreateDirectory(session);
+            return true;
+        }
+
         protected override void RecordFrame(RecordingSession session)
         {
             var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
