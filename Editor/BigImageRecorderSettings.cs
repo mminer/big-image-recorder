@@ -18,7 +18,13 @@ namespace UnityEditor.BigImageRecorder
 
         public BigImageRecorderSettings()
         {
-            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}";
+            FileNameGenerator.AddWildcard(columnWildcard, session =>
+                (session?.recorder as BigImageRecorder)?.columnBeingWritten.ToString() ?? "0");
+
+            FileNameGenerator.AddWildcard(rowWildcard, session =>
+                (session?.recorder as BigImageRecorder)?.rowBeingWritten.ToString() ?? "0");
+
+            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{rowWildcard}-{rowWildcard}";
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor.Recorder;
 using UnityEngine;
@@ -9,6 +10,10 @@ namespace UnityEditor.BigImageRecorder
     /// </summary>
     class BigImageRecorder : GenericRecorder<BigImageRecorderSettings>
     {
+        // These are exposed so that the filename generator in the settings can read what tile we're currently writing.
+        public int columnBeingWritten { get; private set; }
+        public int rowBeingWritten { get; private set; }
+
         protected override bool BeginRecording(RecordingSession session)
         {
             if (!base.BeginRecording(session))
@@ -22,31 +27,33 @@ namespace UnityEditor.BigImageRecorder
 
         protected override void RecordFrame(RecordingSession session)
         {
-            var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
+            WriteImageTiles(session);
+        }
+
+        IReadOnlyList<string> WriteImageTiles(RecordingSession session)
+        {
+            var paths = new List<string>();
             var input = m_Inputs[0] as BigCameraInput;
 
-            for (var row = 0; row < input.InputSettings.RowCount; row++)
+            for (rowBeingWritten = 0; rowBeingWritten < input.InputSettings.RowCount; rowBeingWritten++)
             {
-                for (var column = 0; column < input.InputSettings.ColumnCount; column++)
+                for (columnBeingWritten = 0; columnBeingWritten < input.InputSettings.ColumnCount; columnBeingWritten++)
                 {
-                    var sectionPath = AddPathSuffix(path, $"_{row}-{column}");
-                    var renderTexture = input.OutputRenderTextures[row, column];
-                    var texture = RenderTextureToTexture2D(renderTexture);
+                    var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
+                    paths.Add(path);
+
+                    var renderTexture = input.OutputRenderTextures[rowBeingWritten, columnBeingWritten];
+                    var texture = ConvertToTexture2D(renderTexture);
                     var bytes = texture.EncodeToPNG();
-                    File.WriteAllBytes(sectionPath, bytes);
+
+                    File.WriteAllBytes(path, bytes);
                 }
             }
+
+            return paths;
         }
 
-        static string AddPathSuffix(string path, string suffix)
-        {
-            var directoryName = Path.GetDirectoryName(path);
-            var fileName = Path.GetFileNameWithoutExtension(path);
-            var extension = Path.GetExtension(path);
-            return Path.Combine(directoryName, fileName + suffix + extension);
-        }
-
-        static Texture2D RenderTextureToTexture2D(RenderTexture renderTexture)
+        static Texture2D ConvertToTexture2D(RenderTexture renderTexture)
         {
             var texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
             RenderTexture.active = renderTexture;
