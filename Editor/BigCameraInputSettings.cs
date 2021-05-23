@@ -10,6 +10,8 @@ namespace UnityEditor.BigImageRecorder
     {
         protected override Type InputType => typeof(BigCameraInput);
 
+        public float AspectRatio => (float)OutputWidth / OutputHeight;
+
         public string CameraTag => cameraTag;
 
         [SerializeField] string cameraTag = "MainCamera";

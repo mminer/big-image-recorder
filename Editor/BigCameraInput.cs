@@ -85,8 +85,8 @@ namespace UnityEditor.BigImageRecorder
             // Right:   left * -1/3, right * 1
             var top = camera.nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
             var bottom = -top;
-            var left = bottom * camera.aspect;
-            var right = top * camera.aspect;
+            var left = bottom * inputSettings.AspectRatio;
+            var right = top * inputSettings.AspectRatio;
 
             // How much of the final image each tile accounts for.
             var horizontalTilePercent = 1f / inputSettings.Columns;
