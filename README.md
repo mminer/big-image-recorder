@@ -50,4 +50,4 @@ example, if you install ImageMagick on macOS using Homebrew, enter
 
 The arguments can contain the same wildcards as the file name. Use these to
 specify the frame, rows, and columns, e.g. `-mode concatenate -tile
-<Rows>x<Columns> image_<Frame>*.png out_<Frame>.png`.
+<Rows>x<Columns> image_<Frame>*.png <Frame>.png`.

@@ -49,7 +49,7 @@ namespace UnityEditor.BigImageRecorder
             FileNameGenerator.AddWildcard(tileColumnWildcard, session =>
                 (session?.recorder as BigImageRecorder)?.ColumnBeingWritten.ToString() ?? "0");
 
-            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{tileRowWildcard}-{tileRowWildcard}";
+            FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{tileRowWildcard}-{tileColumnWildcard}";
         }
     }
 }
