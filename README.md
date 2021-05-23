@@ -40,8 +40,8 @@ these are named *image_<Frame>_<Tile Row>-<Tile Column>.png*, e.g.
 [ImageMagick](https://imagemagick.org) offers one option to stitch the image
 tiles together into a final image.
 
-    # Stitches together a frame of two rows and two columns.
-    montage -mode concatenate -tile 2x2 *.png out.png
+    # Stitches together a frame of two columns.
+    montage -mode concatenate -tile 2x *.png out.png
 
 To run this automatically, enter the absolute path to the executable in the
 "Stitch Command" field and its arguments (i.e. `-mode ...`) in "Arguments". For
@@ -50,4 +50,4 @@ example, if you install ImageMagick on macOS using Homebrew, enter
 
 The arguments can contain the same wildcards as the file name. Use these to
 specify the frame, rows, and columns, e.g. `-mode concatenate -tile
-<Rows>x<Columns> image_<Frame>*.png <Frame>.png`.
+<Columns>x image_<Frame>*.png <Frame>.png`.
