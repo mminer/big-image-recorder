@@ -28,7 +28,7 @@ namespace UnityEditor.BigImageRecorder
         }
 
         [Tooltip("Vertical resolution of final image once stitched together.")]
-        [SerializeField] int outputHeight = 8096;
+        [SerializeField] int outputHeight = 8192;
 
         public override int OutputWidth
         {
@@ -37,7 +37,7 @@ namespace UnityEditor.BigImageRecorder
         }
 
         [Tooltip("Horizontal resolution of final image once stitched together.")]
-        [SerializeField] int outputWidth = 8096;
+        [SerializeField] int outputWidth = 8192;
 
         public int Rows => rows;
 
