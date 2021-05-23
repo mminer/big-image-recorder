@@ -51,3 +51,11 @@ example, if you install ImageMagick on macOS using Homebrew, enter
 The arguments can contain the same wildcards as the file name. Use these to
 specify the frame, rows, and columns, e.g. `-mode concatenate -tile
 <Columns>x image_<Frame>*.png <Frame>.png`.
+
+
+## Caveats
+
+Stitching together individual tiles works poorly with some post-processing
+effects. Vignette, for example, gets applied after the camera renders, and when
+you stitch the tile images together it leaves noticeable seams where the edges
+meet. For best results, turn off all screen space effects.
