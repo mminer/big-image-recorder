@@ -42,8 +42,8 @@ namespace UnityEditor.BigImageRecorder
         [Tooltip("Number of vertical tiles.")]
         [SerializeField] int rows = 2;
 
+        public int TileHeight => OutputHeight / Rows;
         public int TileWidth => OutputWidth / Columns;
-        public int TileHeight => OutputWidth / Columns;
 
         protected override bool ValidityCheck(List<string> errors)
         {
