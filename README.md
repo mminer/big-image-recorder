@@ -32,7 +32,7 @@ go this route if you want to modify the source code.
 4. Enter your desired output size, number of rows and columns, and start recording
 
 Recorder spits out multiple images per frame, one for each "tile". By default
-these are named *image_<Frame>_<Tile Row>-<Tile Column>.png*, e.g.
+these are named `image_<Frame>_<Tile Row>-<Tile Column>.png`, e.g.
 *image_0003_1-1.png*.
 
 ### Image Stitching
