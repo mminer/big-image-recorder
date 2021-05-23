@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UnityEditor.BigImageRecorder
 {
     /// <summary>
-    /// Input that divides a tagged camera's projection matrix and renders the tiles to individual render textures.
+    /// Recorder input that divides a camera's projection matrix and renders the tiles to individual render textures.
     /// </summary>
     class BigCameraInput : RecorderInput
     {
@@ -49,8 +49,8 @@ namespace UnityEditor.BigImageRecorder
                 }
             }
 
-            camera.targetTexture = originalTargetTexture;
             camera.ResetProjectionMatrix();
+            camera.targetTexture = originalTargetTexture;
         }
 
         static RenderTexture[,] CreateOutputRenderTextures(BigCameraInputSettings inputSettings)
@@ -61,13 +61,7 @@ namespace UnityEditor.BigImageRecorder
             {
                 for (var column = 0; column < inputSettings.Columns; column++)
                 {
-                    var renderTexture = new RenderTexture(
-                        inputSettings.TileWidth,
-                        inputSettings.TileHeight,
-                        0,
-                        RenderTextureFormat.ARGB32,
-                        RenderTextureReadWrite.Default);
-
+                    var renderTexture = new RenderTexture(inputSettings.TileWidth, inputSettings.TileHeight, 0);
                     renderTexture.Create();
                     outputRenderTextures[row, column] = renderTexture;
                 }
@@ -86,9 +80,9 @@ namespace UnityEditor.BigImageRecorder
             //
             // Say we want to split the projection matrix into vertical thirds. To get the three projection matrices:
             // [ | | ]
-            // Left:    left * 1;       right * -1/3
-            // Center:  left * 1/3;     right * 1/3
-            // Right:   left * -1/3;    right * 1
+            // Left:    left * 1, right * -1/3
+            // Center:  left * 1/3, right * 1/3
+            // Right:   left * -1/3, right * 1
             var top = camera.nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
             var bottom = -top;
             var left = bottom * camera.aspect;
@@ -139,7 +133,7 @@ namespace UnityEditor.BigImageRecorder
             }
             catch (UnityException)
             {
-                Debug.LogWarning($"Tag '{cameraTag}' does not exist.");
+                Debug.LogError($"Tag '{cameraTag}' does not exist.");
                 return null;
             }
         }
