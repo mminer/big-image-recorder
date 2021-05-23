@@ -1,16 +1,19 @@
 # Big Image Recorder
 
 This [Unity Recorder](https://docs.unity3d.com/Manual/com.unity.recorder.html)
-plugin allows you to capture an image sequence at a higher resolution than the
+plugin captures an image sequence at a higher resolution than the
 maximum texture size. Want to output your scene at 100,000 x 100,000 pixels? You
 got it friend.
 
-![Size Comparison](Documentation~/size-comparison.png)
+![8K - 100K size comparison](Documentation~/8k-100k-size-comparison.png)
 
-It accomplishes this by dividing the camera's projection matrix into tiles and
-saving the renders as individual images to stitch together. At present this
-stitching operation is left up to you (but see "Image Stitching" below for
-recommendations).
+To do this it divides the camera's projection matrix into tiles and saves the
+renders as individual images to stitch together.
+
+![Tiles stitched](Documentation~/tiles-stitched.jpg)
+
+At present this stitching operation is left up to you (but see "Image Stitching"
+below for recommendations).
 
 
 ## Installing
@@ -33,13 +36,13 @@ you want to modify the source code.
 3. Enter the tag of your target camera (or keep the default to use your main camera)
 4. Enter your desired output size, number of rows and columns, and start recording
 
-![Recorder Screenshot](Documentation~/recorder-screenshot.png)
+![Recorder screenshot](Documentation~/recorder-screenshot.png)
 
 Recorder spits out multiple images per frame, one for each "tile". By default
 these are named `image_<Frame>_<Tile Row>-<Tile Column>.png`, e.g.
 *image_0003_1-1.png*.
 
-![Tile Images](Documentation~/tile-images.png)
+![Tile images](Documentation~/tile-images.png)
 
 ### Image Stitching
 
@@ -54,7 +57,7 @@ To run this automatically, enter the absolute path to the executable in the
 example, if you install ImageMagick on macOS using Homebrew, enter
 `/usr/local/bin/montage` as the command.
 
-![Stitch Command](Documentation~/stitch-command.png)
+![Stitch command field](Documentation~/stitch-command-field.png)
 
 The arguments can contain the same wildcards as the file name. Use these to
 specify the frame, rows, and columns, e.g. `-mode concatenate -tile
@@ -63,11 +66,10 @@ specify the frame, rows, and columns, e.g. `-mode concatenate -tile
 
 ## Caveats
 
-Stitching together individual tiles works poorly with some post-processing
-effects. Vignette, for example, gets applied after the camera renders, and when
-you stitch the tile images together it leaves noticeable seams where the edges
-meet.
+Dividing a projection matrix into tiles and stitching together the results works
+poorly with post-processing effects. Vignette, for example, gets applied after
+the camera renders and leaves noticeable seams where the edges meet.
 
-![Tile Vignetting](Documentation~/tile-vignetting.jpg)
+![Stitch vignetting](Documentation~/stitch-vignetting.jpg)
 
 For best results, turn off all screen space effects.
