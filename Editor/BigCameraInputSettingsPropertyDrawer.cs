@@ -19,8 +19,6 @@ namespace UnityEditor.BigImageRecorder
             var outputWidth = property.FindPropertyRelative("outputWidth");
             var rows = property.FindPropertyRelative("rows");
 
-            var tileWidth = outputWidth.intValue / columns.intValue;
-            var tileHeight = outputHeight.intValue / rows.intValue;
 
             using (new EditorGUI.IndentLevelScope(-1))
             {
@@ -29,7 +27,17 @@ namespace UnityEditor.BigImageRecorder
                 EditorGUILayout.PropertyField(outputHeight);
                 EditorGUILayout.PropertyField(rows);
                 EditorGUILayout.PropertyField(columns);
-                EditorGUILayout.LabelField("Tile Size", $"{tileWidth} × {tileHeight}");
+
+                if (rows.intValue > 0 && columns.intValue > 0)
+                {
+                    var tileWidth = outputWidth.intValue / columns.intValue;
+                    var tileHeight = outputHeight.intValue / rows.intValue;
+                    EditorGUILayout.LabelField("Tile Size", $"{tileWidth} × {tileHeight}");
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("Tile Size", $"");
+                }
             }
         }
     }
