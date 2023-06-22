@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -18,6 +17,9 @@ namespace UnityEditor.BigImageRecorder
         public int ColumnBeingWritten { get; private set; }
         public int RowBeingWritten { get; private set; }
 
+        string[] paths;
+        Texture2D tileTexture;
+
         protected override bool BeginRecording(RecordingSession session)
         {
             if (!base.BeginRecording(session) || !Input.HasCamera)
@@ -25,17 +27,29 @@ namespace UnityEditor.BigImageRecorder
                 return false;
             }
 
+            paths = new string[Input.InputSettings.Rows * Input.InputSettings.Columns];
+            tileTexture = new Texture2D(Input.InputSettings.TileWidth, Input.InputSettings.TileHeight, TextureFormat.RGBA32, false);
+
             Settings.FileNameGenerator.CreateDirectory(session);
             return true;
         }
 
         protected override void RecordFrame(RecordingSession session)
         {
-            var paths = WriteImageTiles(session);
-            RunStitchCommand(session, paths);
+            WriteImageTiles(session);
+            RunStitchCommand(session);
         }
 
-        void RunStitchCommand(RecordingSession session, IReadOnlyList<string> paths)
+        protected override void EndRecording(RecordingSession session)
+        {
+            base.EndRecording(session);
+            paths = null;
+
+            Destroy(tileTexture);
+            tileTexture = null;
+        }
+
+        void RunStitchCommand(RecordingSession session)
         {
             if (string.IsNullOrWhiteSpace(Settings.StitchCommand))
             {
@@ -63,26 +77,25 @@ namespace UnityEditor.BigImageRecorder
             }
         }
 
-        IReadOnlyList<string> WriteImageTiles(RecordingSession session)
+        void WriteImageTiles(RecordingSession session)
         {
-            var paths = new List<string>();
-
             for (RowBeingWritten = 0; RowBeingWritten < Input.InputSettings.Rows; RowBeingWritten++)
             {
                 for (ColumnBeingWritten = 0; ColumnBeingWritten < Input.InputSettings.Columns; ColumnBeingWritten++)
                 {
                     var path = Settings.FileNameGenerator.BuildAbsolutePath(session);
-                    paths.Add(path);
+                    paths[RowBeingWritten * Input.InputSettings.Columns + ColumnBeingWritten] = path;
 
+                    // Convert render texture to Texture2D.
                     var renderTexture = Input.OutputRenderTextures[RowBeingWritten, ColumnBeingWritten];
-                    var texture = ConvertToTexture2D(renderTexture);
-                    var bytes = texture.EncodeToPNG();
+                    RenderTexture.active = renderTexture;
+                    tileTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+                    tileTexture.Apply();
 
+                    var bytes = tileTexture.EncodeToPNG();
                     File.WriteAllBytes(path, bytes);
                 }
             }
-
-            return paths;
         }
 
         static string ApplyWildcards(RecorderSettings settings, RecordingSession session, string str)
@@ -92,16 +105,8 @@ namespace UnityEditor.BigImageRecorder
                 .GetType()
                 .GetMethod("ApplyWildcards", BindingFlags.Instance | BindingFlags.NonPublic);
 
+            UnityEngine.Debug.Assert(applyWildcardsMethod != null);
             return applyWildcardsMethod.Invoke(settings.FileNameGenerator, new object[] {str, session}) as string;
-        }
-
-        static Texture2D ConvertToTexture2D(RenderTexture renderTexture)
-        {
-            var texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
-            RenderTexture.active = renderTexture;
-            texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-            texture.Apply();
-            return texture;
         }
     }
 }
