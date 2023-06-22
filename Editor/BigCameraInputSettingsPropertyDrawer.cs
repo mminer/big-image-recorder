@@ -19,7 +19,6 @@ namespace UnityEditor.BigImageRecorder
             var outputWidth = property.FindPropertyRelative("outputWidth");
             var rows = property.FindPropertyRelative("rows");
 
-
             using (new EditorGUI.IndentLevelScope(-1))
             {
                 EditorGUILayout.PropertyField(cameraTag);

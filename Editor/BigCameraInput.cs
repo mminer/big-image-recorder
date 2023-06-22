@@ -9,16 +9,19 @@ namespace UnityEditor.BigImageRecorder
     /// </summary>
     class BigCameraInput : RecorderInput
     {
+        public bool HasCamera => camera != null;
         public BigCameraInputSettings InputSettings => settings as BigCameraInputSettings;
         public RenderTexture[,] OutputRenderTextures { get; private set; }
 
+        Camera camera;
         Matrix4x4[,] projectionMatrices;
 
         protected override void BeginRecording(RecordingSession session)
         {
             base.BeginRecording(session);
             OutputRenderTextures = CreateOutputRenderTextures(InputSettings);
-            projectionMatrices = CreateProjectionMatrices(InputSettings);
+            camera = GetTargetCamera(InputSettings.CameraTag);
+            projectionMatrices = CreateProjectionMatrices(InputSettings, camera);
         }
 
         protected override void Dispose(bool disposing)
@@ -36,7 +39,12 @@ namespace UnityEditor.BigImageRecorder
         protected override void NewFrameReady(RecordingSession session)
         {
             base.NewFrameReady(session);
-            var camera = GetTargetCamera(InputSettings.CameraTag);
+
+            if (camera == null)
+            {
+                return;
+            }
+
             var originalTargetTexture = camera.targetTexture;
 
             for (var row = 0; row < InputSettings.Rows; row++)
@@ -70,10 +78,15 @@ namespace UnityEditor.BigImageRecorder
             return outputRenderTextures;
         }
 
-        static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings)
+        static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings, Camera camera)
         {
+            if (camera == null)
+            {
+                return null;
+            }
+
             var projectionMatrices = new Matrix4x4[inputSettings.Rows, inputSettings.Columns];
-            var camera = GetTargetCamera(inputSettings.CameraTag);
+            var nearClipPlane = camera.nearClipPlane;
 
             // Values to create the original projection matrix.
             // We multiply these by a modifier from -1 to 1 to get a partial projection matrix.
@@ -83,7 +96,7 @@ namespace UnityEditor.BigImageRecorder
             // Left:    left * 1, right * -1/3
             // Center:  left * 1/3, right * 1/3
             // Right:   left * -1/3, right * 1
-            var top = camera.nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            var top = nearClipPlane * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
             var bottom = -top;
             var left = bottom * inputSettings.AspectRatio;
             var right = top * inputSettings.AspectRatio;
@@ -103,9 +116,9 @@ namespace UnityEditor.BigImageRecorder
                     var tileRight = right * (-1 + 2 * horizontalTilePercent * (column + 1));
 
                     var projectionMatrix = camera.projectionMatrix;
-                    projectionMatrix.m00 = 2 * camera.nearClipPlane / (tileRight - tileLeft);
+                    projectionMatrix.m00 = 2 * nearClipPlane / (tileRight - tileLeft);
                     projectionMatrix.m02 = (tileRight + tileLeft) / (tileRight - tileLeft);
-                    projectionMatrix.m11 = 2 * camera.nearClipPlane / (tileTop - tileBottom);
+                    projectionMatrix.m11 = 2 * nearClipPlane / (tileTop - tileBottom);
                     projectionMatrix.m12 = (tileTop + tileBottom) / (tileTop - tileBottom);
                     projectionMatrices[row, column] = projectionMatrix;
                 }
@@ -116,26 +129,35 @@ namespace UnityEditor.BigImageRecorder
 
         static Camera GetTargetCamera(string cameraTag)
         {
+            GameObject[] gameObjectsWithTag;
+
             try
             {
-                var cameras = GameObject
-                    .FindGameObjectsWithTag(cameraTag)
-                    .Select(gameObject => gameObject.GetComponent<Camera>())
-                    .Where(camera => camera != null)
-                    .ToList();
-
-                if (cameras.Count > 1)
-                {
-                    Debug.LogWarning($"Found more than one camera with tag '{cameraTag}'.");
-                }
-
-                return cameras.FirstOrDefault();
+                gameObjectsWithTag = GameObject.FindGameObjectsWithTag(cameraTag);
             }
             catch (UnityException)
             {
-                Debug.LogError($"Tag '{cameraTag}' does not exist.");
+                Debug.LogError($"[Big Image Recorder] Tag '{cameraTag}' does not exist.");
                 return null;
             }
+
+            var cameras = gameObjectsWithTag
+                .Select(gameObject => gameObject.GetComponent<Camera>())
+                .Where(camera => camera != null)
+                .ToList();
+
+            if (cameras.Count == 0)
+            {
+                Debug.LogError($"[Big Image Recorder] Found no camera with tag '{cameraTag}'.");
+                return null;
+            }
+
+            if (cameras.Count > 1)
+            {
+                Debug.LogWarning($"[Big Image Recorder] Found more than one camera with tag '{cameraTag}'.");
+            }
+
+            return cameras.First();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace UnityEditor.BigImageRecorder
 
         protected override bool BeginRecording(RecordingSession session)
         {
-            if (!base.BeginRecording(session))
+            if (!base.BeginRecording(session) || !Input.HasCamera)
             {
                 return false;
             }
