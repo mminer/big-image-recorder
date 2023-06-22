@@ -40,7 +40,7 @@ you want to modify the source code.
 
 Recorder spits out multiple images per frame, one for each "tile". By default
 these are named `image_<Frame>_<Tile Row>-<Tile Column>.png`, e.g.
-*image_0003_1-1.png*.
+*image_0003_01-01.png*.
 
 ![Tile images](Documentation~/tile-images.png)
 
