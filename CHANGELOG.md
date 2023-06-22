@@ -6,7 +6,7 @@ All notable changes to Big Image Recorder will be documented in this file.
 
 ### Changed
 
-- Use double digits for row and columns in filenames
+- Use double digits for row and columns in filenames (courtesy @LucyBW1)
 
 ## [1.0.1] - 2023-06-21
 
