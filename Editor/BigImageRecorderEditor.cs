@@ -6,10 +6,7 @@ namespace UnityEditor.BigImageRecorder
     [CustomEditor(typeof(BigImageRecorderSettings))]
     class BigImageRecorderEditor : RecorderEditor
     {
-        static class Styles
-        {
-            public static readonly GUIContent ArgumentsLabel = new GUIContent("Arguments");
-        }
+        static readonly GUIContent argumentsLabel = new GUIContent("Arguments");
 
         protected override void FileTypeAndFormatGUI()
         {
@@ -30,7 +27,7 @@ namespace UnityEditor.BigImageRecorder
             {
                 using (new EditorGUI.IndentLevelScope())
                 {
-                    EditorGUILayout.PropertyField(stitchCommandArguments, Styles.ArgumentsLabel);
+                    EditorGUILayout.PropertyField(stitchCommandArguments, argumentsLabel);
                 }
 
                 EditorGUILayout.PropertyField(deleteAfterStitching);
