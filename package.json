@@ -5,6 +5,6 @@
   "unity": "2020.3",
   "description": "Recorder to capture image sequences that exceed Unity's maximum texture size.",
   "dependencies": {
-    "com.unity.recorder": "2.5.0"
+    "com.unity.recorder": "3.0.0"
   }
 }

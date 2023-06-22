@@ -47,41 +47,34 @@ namespace UnityEditor.BigImageRecorder
         public int TileHeight => OutputHeight / Rows;
         public int TileWidth => OutputWidth / Columns;
 
-        protected override bool ValidityCheck(List<string> errors)
+        protected override void CheckForErrors(List<string> errors)
         {
-            var ok = true;
+            base.CheckForErrors(errors);
 
             if (Columns < 1 || Rows < 1)
             {
-                errors.Add($"Need at least one row and column.");
-                ok = false;
+                errors.Add($"Need at least one row and one column.");
             }
 
             if (OutputWidth % Columns != 0)
             {
                 errors.Add($"Output width must be a multiple of the columns.");
-                ok = false;
             }
 
             if (OutputHeight % Rows != 0)
             {
                 errors.Add($"Output height must be a multiple of the rows.");
-                ok = false;
             }
 
             if (OutputWidth <= 0 || OutputHeight <= 0)
             {
                 errors.Add($"Invalid output resolution: {OutputWidth}x{OutputHeight}");
-                ok = false;
             }
 
             if (TileWidth > SystemInfo.maxTextureSize || TileHeight > SystemInfo.maxTextureSize)
             {
                 errors.Add($"Tile size exceeds the maximum texture size ({SystemInfo.maxTextureSize}).");
-                ok = false;
             }
-
-            return ok;
         }
     }
 }
