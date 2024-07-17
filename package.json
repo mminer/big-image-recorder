@@ -1,4 +1,8 @@
 {
+  "author": {
+    "name": "Matthew Miner",
+    "email": "matthew@matthewminer.com"
+  },
   "name": "com.matthewminer.bigimagerecorder",
   "displayName": "Big Image Recorder",
   "version": "1.0.2",
