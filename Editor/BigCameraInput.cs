@@ -9,7 +9,7 @@ namespace UnityEditor.BigImageRecorder
     /// </summary>
     class BigCameraInput : RecorderInput
     {
-        public bool HasCamera => camera != null;
+        public bool HasCamera => camera;
         public BigCameraInputSettings InputSettings => settings as BigCameraInputSettings;
         public RenderTexture[,] OutputRenderTextures { get; private set; }
 
@@ -40,7 +40,7 @@ namespace UnityEditor.BigImageRecorder
         {
             base.NewFrameReady(session);
 
-            if (camera == null)
+            if (!camera)
             {
                 return;
             }
@@ -80,7 +80,7 @@ namespace UnityEditor.BigImageRecorder
 
         static Matrix4x4[,] CreateProjectionMatrices(BigCameraInputSettings inputSettings, Camera camera)
         {
-            if (camera == null)
+            if (!camera)
             {
                 return null;
             }
@@ -142,8 +142,8 @@ namespace UnityEditor.BigImageRecorder
             }
 
             var cameras = gameObjectsWithTag
-                .Select(gameObject => gameObject.GetComponent<Camera>())
-                .Where(camera => camera != null)
+                .Select(static gameObject => gameObject.GetComponent<Camera>())
+                .Where(static camera => camera)
                 .ToList();
 
             if (cameras.Count == 0)

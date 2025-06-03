@@ -35,7 +35,7 @@ namespace UnityEditor.BigImageRecorder
                 }
                 else
                 {
-                    EditorGUILayout.LabelField("Tile Size", $"");
+                    EditorGUILayout.LabelField("Tile Size", "");
                 }
             }
         }

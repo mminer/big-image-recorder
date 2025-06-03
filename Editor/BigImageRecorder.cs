@@ -106,7 +106,7 @@ namespace UnityEditor.BigImageRecorder
                 .GetMethod("ApplyWildcards", BindingFlags.Instance | BindingFlags.NonPublic);
 
             UnityEngine.Debug.Assert(applyWildcardsMethod != null);
-            return applyWildcardsMethod.Invoke(settings.FileNameGenerator, new object[] {str, session}) as string;
+            return applyWildcardsMethod.Invoke(settings.FileNameGenerator, new object[] { str, session }) as string;
         }
     }
 }

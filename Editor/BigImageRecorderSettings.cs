@@ -37,16 +37,16 @@ namespace UnityEditor.BigImageRecorder
 
         public BigImageRecorderSettings()
         {
-            FileNameGenerator.AddWildcard(rowsWildcard, session =>
+            FileNameGenerator.AddWildcard(rowsWildcard, static session =>
                 (session?.recorder as BigImageRecorder)?.Input.InputSettings.Rows.ToString("D2") ?? "0");
 
-            FileNameGenerator.AddWildcard(columnsWildcard, session =>
+            FileNameGenerator.AddWildcard(columnsWildcard, static session =>
                 (session?.recorder as BigImageRecorder)?.Input.InputSettings.Columns.ToString("D2") ?? "0");
 
-            FileNameGenerator.AddWildcard(tileRowWildcard, session =>
+            FileNameGenerator.AddWildcard(tileRowWildcard, static session =>
                 (session?.recorder as BigImageRecorder)?.RowBeingWritten.ToString("D2") ?? "0");
 
-            FileNameGenerator.AddWildcard(tileColumnWildcard, session =>
+            FileNameGenerator.AddWildcard(tileColumnWildcard, static session =>
                 (session?.recorder as BigImageRecorder)?.ColumnBeingWritten.ToString("D2") ?? "0");
 
             FileNameGenerator.FileName = $"image_{DefaultWildcard.Frame}_{tileRowWildcard}-{tileColumnWildcard}";

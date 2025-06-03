@@ -53,17 +53,17 @@ namespace UnityEditor.BigImageRecorder
 
             if (Columns < 1 || Rows < 1)
             {
-                errors.Add($"Need at least one row and one column.");
+                errors.Add("Need at least one row and one column.");
             }
 
             if (OutputWidth % Columns != 0)
             {
-                errors.Add($"Output width must be a multiple of the columns.");
+                errors.Add("Output width must be a multiple of the columns.");
             }
 
             if (OutputHeight % Rows != 0)
             {
-                errors.Add($"Output height must be a multiple of the rows.");
+                errors.Add("Output height must be a multiple of the rows.");
             }
 
             if (OutputWidth <= 0 || OutputHeight <= 0)
