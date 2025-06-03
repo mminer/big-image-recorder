@@ -6,7 +6,7 @@
   "name": "com.matthewminer.bigimagerecorder",
   "displayName": "Big Image Recorder",
   "version": "1.0.2",
-  "unity": "2020.3",
+  "unity": "2021.2",
   "description": "Recorder to capture image sequences that exceed Unity's maximum texture size.",
   "dependencies": {
     "com.unity.recorder": "3.0.0"

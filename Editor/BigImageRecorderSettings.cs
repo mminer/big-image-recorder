@@ -19,7 +19,7 @@ namespace UnityEditor.BigImageRecorder
 
         protected override string Extension => "png";
 
-        [SerializeField] BigImageInputSelector imageInputSelector = new BigImageInputSelector();
+        [SerializeField] BigImageInputSelector imageInputSelector = new();
         public string StitchCommand => stitchCommand;
 
         [Tooltip("Command to run after each frame is written to image tiles.")]

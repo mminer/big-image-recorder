@@ -2,6 +2,12 @@
 
 All notable changes to Big Image Recorder will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- Minimum Unity version increased to 2021.2
+
 ## [1.0.2] - 2023-06-22
 
 ### Changed

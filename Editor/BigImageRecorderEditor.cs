@@ -6,7 +6,7 @@ namespace UnityEditor.BigImageRecorder
     [CustomEditor(typeof(BigImageRecorderSettings))]
     class BigImageRecorderEditor : RecorderEditor
     {
-        static readonly GUIContent argumentsLabel = new GUIContent("Arguments");
+        static readonly GUIContent argumentsLabel = new("Arguments");
 
         protected override void FileTypeAndFormatGUI()
         {

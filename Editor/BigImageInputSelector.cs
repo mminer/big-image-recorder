@@ -10,6 +10,6 @@ namespace UnityEditor.BigImageRecorder
     [Serializable]
     class BigImageInputSelector : InputSettingsSelector
     {
-        [SerializeField] BigCameraInputSettings cameraInputSettings = new BigCameraInputSettings();
+        [SerializeField] BigCameraInputSettings cameraInputSettings = new();
     }
 }
