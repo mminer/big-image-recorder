@@ -2,7 +2,7 @@
     "name": "BigImageRecorder.Editor",
     "rootNamespace": "",
     "references": [
-        "Unity.Recorder.Editor"
+        "GUID:847b179520b009e4c8d15c296b1cbf35"
     ],
     "includePlatforms": [
         "Editor"
