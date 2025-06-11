@@ -18,15 +18,31 @@ below for recommendations).
 
 ## Installing
 
-Add this package to your project using the Unity Package Manager (UPM).
+Add the package to your project via
+[UPM](https://docs.unity3d.com/Manual/upm-ui.html) using the Git URL:
 
-1. Open *Window > Package Manager*
-2. If it's not already in your project, install Recorder from the Unity Registry
-3. Click "+" in the top-left corner and choose "Add package from git URL..."
-4. Enter https://github.com/mminer/big-image-recorder.git
+```
+https://github.com/mminer/big-image-recorder.git
+```
 
-You can also clone this repository and point UPM to your local copy. Do this if
-you want to modify the source code.
+1. Open the Package Manager window in Unity (*Window > Package Manager*)
+2. Click the "+" button in the top-left corner
+3. Select "Install package from git URL..."
+4. Enter the above Git URL
+5. Click "Install"
+
+Alternatively, add the following line to your `Packages/manifest.json` file:
+
+```json
+{
+  "dependencies": {
+    "com.matthewminer.big-image-recorder": "https://github.com/mminer/big-image-recorder.git",
+    ...
+  }
+}
+```
+
+You can also clone the repository and point UPM to your local copy.
 
 
 ## Using
